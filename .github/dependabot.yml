@@ -1,0 +1,26 @@
+version: 2
+# Dependabot: weekly minor/patch version-update PRs for npm + GitHub Actions.
+# You review and merge — no auto-merge to production, per the authorization posture.
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    labels: ["dependencies", "security"]
+    commit-message:
+      prefix: "deps"
+    ignore:
+      # Pinned stack — MAJOR bumps are hand-managed. Minor/patch + security
+      # fixes still flow. A rare major SECURITY bump is surfaced by the weekly
+      # npm-audit job and the nightly security watchtower instead.
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    labels: ["ci", "dependencies"]
+    commit-message:
+      prefix: "ci"
