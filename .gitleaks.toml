@@ -1,0 +1,6 @@
+# gitleaks config — extends the default ruleset. Allowlist ONLY human-verified
+# benign findings. Full-history scan 2026-07-05 (21 commits): 0 findings.
+# This repo is PUBLIC — never allowlist anything without verifying it is not a secret.
+
+[extend]
+useDefault = true

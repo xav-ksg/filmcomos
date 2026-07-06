@@ -1,0 +1,109 @@
+name: Security scan
+
+# KSG Security Watchtower — Layer A (application code layer).
+# Standard: Xav Master Control/KSG Security Watchtower Standard (2026-07-05).md
+# BLOCKING: secrets (gitleaks) + no tracked .env files + types (tsc).
+# REPORT-ONLY: SAST (semgrep), dependency audit, lint.
+# NOTE: this repo is PUBLIC — a leaked secret here is instantly world-readable.
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+  schedule:
+    - cron: '0 8 * * 1'   # weekly Monday 08:00 UTC deep sweep
+  workflow_dispatch:
+
+concurrency:
+  group: security-scan-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  secrets:
+    name: Secrets — gitleaks (blocking)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+      - name: Install gitleaks
+        run: |
+          V=8.21.2
+          curl -sSL "https://github.com/gitleaks/gitleaks/releases/download/v${V}/gitleaks_${V}_linux_x64.tar.gz" | tar -xz gitleaks
+      - name: Scan history + working tree
+        run: ./gitleaks detect --source . --config .gitleaks.toml --redact --exit-code 1 --verbose
+
+  env-files:
+    name: No tracked .env files (blocking)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Fail if a non-.example .env file is tracked
+        run: |
+          tracked=$(git ls-files | grep -E '(^|/)\.env($|\.)' | grep -vE '\.example$' || true)
+          if [ -n "$tracked" ]; then
+            echo "::error::Tracked env file(s) found — these can carry real secrets that gitleaks misses:"
+            echo "$tracked"
+            exit 1
+          fi
+          echo "No tracked env files."
+
+  typecheck:
+    name: Types — tsc (blocking)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - run: npm run typecheck
+
+  sast:
+    name: SAST — Semgrep OSS (report-only)
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: pip install --quiet semgrep
+      - name: Semgrep (community rulesets)
+        run: |
+          semgrep --error \
+            --config p/typescript \
+            --config p/react \
+            --config p/javascript \
+            --config p/secrets \
+            --config p/owasp-top-ten
+
+  deps:
+    name: Dependencies — npm audit ≥ high (report-only)
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - run: npm audit --audit-level=high
+
+  lint:
+    name: Lint (report-only)
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - run: npm run lint
