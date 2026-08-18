@@ -26,3 +26,6 @@ Phase-1 scope + blockers: [./docs/phase-1-scope.md](./docs/phase-1-scope.md) · 
 ## Ownership
 
 Kenwood Solutions Group (KSG). Founder and operator: Xav Dubois (xav@kenwoodsolutions.com).
+
+## UI Design Standard (global — all KSG platforms: FSM, CH360, YEH, GrantsOS, etc.)
+- **Dirty-save rule (Xav 2026-07-31):** Every Save/Update button on an edit form MUST look flat/dimmed and disabled until the form actually has unsaved changes, then light up (primary color) once dirty. An active-looking Save on a clean form misleads users into thinking something needs saving. Create/action buttons (Add, Publish, Send, Approve…) stay active — the rule is for saving *changes* to an existing record. Reference implementation: frost-shop `app/components/DirtySaveButton.tsx`.
