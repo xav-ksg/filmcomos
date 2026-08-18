@@ -1,4 +1,4 @@
-# filmcomos — Project CLAUDE.md
+# FilmComOS — Project CLAUDE.md
 
 > ## 🔒 READ FIRST — KSG operating rules live upstream, not in this file
 >
@@ -15,17 +15,17 @@
 - **DEPLOY MODE:** production deploys are gated *unless* Xav has said "DEPLOY MODE ON" this session. When ON, announce-then-execute — never ask. Always gated regardless: destructive migrations, data deletion, DNS, secret rotation, money movement, external comms.
 - **Never deploy an edge function without diffing deployed-vs-repo first.** This has already caught two uncommitted production features.
 - **Cross-platform:** MacBook Pro M5 (primary) + Dell XPS 15 / Win 11. No hardcoded absolute paths. lowercase-kebab filenames. `.gitattributes` with `eol=lf` is mandatory — never remove it.
-- **Canonical names:** FilmComOS (not "FilmOS") · CivicHub360 (CH360) · YourEventsHub (YEH) · Frost Shop Marketplace (FSM) · Grants Platform.
+- **Canonical names:** FilmComOS (not "FilmComOS") · CivicHub360 (CH360) · YourEventsHub (YEH) · Frost Shop Marketplace (FSM) · Grants Platform.
 - **Lovable is PROHIBITED.** No account exists. Never connect, reference, or reintroduce it.
 
 ---
 
-# FilmOS
+# FilmComOS
 
 Film Commission Operating System — piloting at Yosemite Film Commission (YFC),
 designed to be white-labeled for global film commissions worldwide.
 
-> **🗺️ Source-of-truth map — READ FIRST (any KSG repo):** ~~`Xav Master Control/KSG Source-of-Truth Index (2026-07-13).md`~~ **(this file never existed on disk — superseded by the Notion Index above)** — every KSG platform's repo, prod, DB, canonical spec, build-state doc, Notion mirror, and which shared standards apply. **This repo = FilmComOS/FilmOS** (`filmcomos`, Next.js 16, Supabase, prod from `main`). Current build-state lives in **git history + the product spec below** — there is no in-repo RESUME doc yet. **FSM (`xav-ksg/frost-shop`) is the KSG reference implementation** — its security patterns already applied here (Watchtower Layer A); its form-guard / Turnstile (flag-gated) / Frosty / email-design patterns are fork-ready when relevant. KSG entities (Ignite Space, Frost Shop, etc.) must appear on par with every other vendor in FilmOS.
+> **🗺️ Source-of-truth map — READ FIRST (any KSG repo):** ~~`Xav Master Control/KSG Source-of-Truth Index (2026-07-13).md`~~ **(this file never existed on disk — superseded by the Notion Index above)** — every KSG platform's repo, prod, DB, canonical spec, build-state doc, Notion mirror, and which shared standards apply. **This repo = FilmComOS** (`filmcomos`, Next.js 16, Supabase, prod from `main`). Current build-state lives in **git history + the product spec below** — there is no in-repo RESUME doc yet. **FSM (`xav-ksg/frost-shop`) is the KSG reference implementation** — its security patterns already applied here (Watchtower Layer A); its form-guard / Turnstile (flag-gated) / Frosty / email-design patterns are fork-ready when relevant. KSG entities (Ignite Space, Frost Shop, etc.) must appear on par with every other vendor in FilmComOS.
 
 > **Family standards:** load the relevant KSG shared standard before building the thing it governs (Platform Harmony, Email Design, Search Everywhere, UI-UX, Compliance Partnership, Two-Way Comms, Scale-Trigger). Exact locations are in the Source-of-Truth Index §3.
 
